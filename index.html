@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Trend-Tuner</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Jason Mayes">
+
+    <!-- Import the webpage's stylesheet -->
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        body {
+            background-image: url('PHOTO3.jpg');
+            background-size: cover;
+            background-position: center;
+            color: rgb(255, 255, 255);
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header, footer {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            width: 100%;
+            text-align: center;
+            display: flex;
+            align-items: center; /* Center vertically */
+            justify-content: center; /* Center horizontally */
+        }
+        header h2, footer p {
+            margin: 0;
+            margin-left: 10px; /* Space between logo and text */
+        }
+        #logo {
+            max-width: 90px; 
+            margin-bottom: 0; /* Remove bottom margin */
+        }
+        #demos {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #webcam {
+            margin-top: 10px;
+            border: 2px solid #fff;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header class="note"> 
+        <img id="logo" src="LOGO_prev_ui.png" alt="TrendTuner Logo"> 
+        <h2>TrendTuner</h2>
+    </header>
+    
+    <section id="demos" class="invisible">
+        <div id="liveView" class="webcam">
+            <button id="webcamButton">Enable Webcam</button>
+            <video id="webcam" autoplay></video>
+        </div>
+    </section>
+    
+    <footer class="note">
+        <p>© 2024 TrendTuner. All rights reserved.</p>
+    </footer>
+    
+    <!-- Import TensorFlow.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js" type="text/javascript"></script>
+
+    <!-- Load the bodypix model to recognize body parts in images -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/body-pix@2.0"></script>
+    
+    <!-- Import the page's JavaScript to handle webcam -->
+    <script>
+        const webcamButton = document.getElementById('webcamButton');
+        const video = document.getElementById('webcam');
+        const liveView = document.getElementById('liveView');
+
+        async function setupWebcam() {
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: true
+            });
+            video.srcObject = stream;
+
+            return new Promise((resolve) => {
+                video.onloadedmetadata = () => {
+                    resolve(video);
+                };
+            });
+        }
+
+        webcamButton.addEventListener('click', async () => {
+            await setupWebcam();
+            liveView.classList.remove('invisible');
+            webcamButton.style.display = 'none'; // Hide button after enabling webcam
+        });
+    </script>
+</body>
+</html>
